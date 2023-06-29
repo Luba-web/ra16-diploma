@@ -171,6 +171,12 @@ section {
   min-height: 300px;
 }
 
+.img-custom {
+  max-width: 100%;
+  height: 463px;
+  object-fit: contain;
+}
+
 /* Catalog */
 .catalog {
   min-height: 600px;

@@ -6,8 +6,6 @@ import { useState } from 'react';
 export function Header() {
   const navigate = useNavigate();
 
-  const activeLink = ({ isActive }) =>
-    isActive ? 'nav-item active' : 'nav-item';
   const [activeSearch, setActiveSearch] = useState(false);
   const [value, setValue] = useState('');
 
@@ -27,35 +25,39 @@ export function Header() {
             <Logo src={logoImg} />
             <div className="collapse navbar-collapse" id="navbarMain">
               <ul className="navbar-nav mr-auto">
-                <li className={activeLink}>
-                  <NavLink className="nav-link" to="/" activeclassname="active">
+                <li
+                  className={({ isActive }) =>
+                    isActive ? 'nav-item active' : 'nav-item'
+                  }
+                >
+                  <NavLink className="nav-link" to="/">
                     Главная
                   </NavLink>
                 </li>
-                <li className={activeLink}>
-                  <NavLink
-                    className="nav-link"
-                    to="/catalog.html"
-                    activeclassname="active"
-                  >
+                <li
+                  className={({ isActive }) =>
+                    isActive ? 'nav-item active' : 'nav-item'
+                  }
+                >
+                  <NavLink className="nav-link" to="/catalog.html">
                     Каталог
                   </NavLink>
                 </li>
-                <li className={activeLink}>
-                  <NavLink
-                    className="nav-link"
-                    to="/about.html"
-                    activeclassname="active"
-                  >
+                <li
+                  className={({ isActive }) =>
+                    isActive ? 'nav-item active' : 'nav-item'
+                  }
+                >
+                  <NavLink className="nav-link" to="/about.html">
                     О магазине
                   </NavLink>
                 </li>
-                <li className={activeLink}>
-                  <NavLink
-                    className="nav-link"
-                    to="/contacts.html"
-                    activeclassname="active"
-                  >
+                <li
+                  className={({ isActive }) =>
+                    isActive ? 'nav-item active' : 'nav-item'
+                  }
+                >
+                  <NavLink className="nav-link" to="/contacts.html">
                     Контакты
                   </NavLink>
                 </li>

@@ -14,9 +14,9 @@ function App() {
   return (
     <>
       <Header />
-      <main class="container">
-        <div class="row">
-          <div class="col">
+      <main className="container">
+        <div className="row">
+          <div className="col">
             <Bunner src={banner} />
             <Routes>
               <Route path="/" element={<HomePage />} />

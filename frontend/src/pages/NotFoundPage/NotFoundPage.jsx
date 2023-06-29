@@ -3,18 +3,18 @@
 export const NotFoundPage = () => {
   return (
     <>
-      <div class="row">
-        <div class="col">
-          <div class="banner">
+      <div className="row">
+        <div className="col">
+          <div className="banner">
             <img
               src="./img/banner.jpg"
-              class="img-fluid"
+              className="img-fluid"
               alt="К весне готовы!"
             />
-            <h2 class="banner-header">К весне готовы!</h2>
+            <h2 className="banner-header">К весне готовы!</h2>
           </div>
-          <section class="top-sales">
-            <h2 class="text-center">Страница не найдена</h2>
+          <section className="top-sales">
+            <h2 className="text-center">Страница не найдена</h2>
             <p>Извините, такая страница не найдена!</p>
           </section>
         </div>

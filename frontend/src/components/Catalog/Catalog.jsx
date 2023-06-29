@@ -1,7 +1,13 @@
 import { useState } from 'react';
+import { Card } from '../Card/Card';
 import { SearchForm } from '../SearchForm/SearchForm';
+import { arr } from '../utils/const';
 
 export function Catalog({ isActiveForm }) {
+  const [catalogArr /*setCatalogArr*/] = useState(arr);
+
+  const handleDownloadMore = () => {};
+
   return (
     <section className="catalog">
       <h2 className="text-center">Каталог</h2>
@@ -34,105 +40,19 @@ export function Catalog({ isActiveForm }) {
         </li>
       </ul>
       <div className="row">
-        <div className="col-4">
-          <div className="card catalog-item-card">
-            <img
-              src="./img/products/sandals_myer.jpg"
-              className="card-img-top img-fluid"
-              alt="Босоножки 'MYER'"
-            />
-            <div className="card-body">
-              <p className="card-text">Босоножки 'MYER'</p>
-              <p className="card-text">34 000 руб.</p>
-              <a href="/products/1.html" className="btn btn-outline-primary">
-                Заказать
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col-4">
-          <div className="card catalog-item-card">
-            <img
-              src=".img/products/sandals_keira.jpg"
-              className="card-img-top img-fluid"
-              alt="Босоножки 'Keira'"
-            />
-            <div className="card-body">
-              <p className="card-text">Босоножки 'Keira'</p>
-              <p className="card-text">7 600 руб.</p>
-              <a href="/products/1.html" className="btn btn-outline-primary">
-                Заказать
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col-4">
-          <div className="card catalog-item-card">
-            <img
-              src="./img/products/superhero_sneakers.jpg"
-              className="card-img-top img-fluid"
-              alt="Супергеройские кеды"
-            />
-            <div className="card-body">
-              <p className="card-text">Супергеройские кеды</p>
-              <p className="card-text">1 400 руб.</p>
-              <a href="/products/1.html" className="btn btn-outline-primary">
-                Заказать
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col-4">
-          <div className="card catalog-item-card">
-            <img
-              src="./img/products/sandals_myer.jpg"
-              className="card-img-top img-fluid"
-              alt="Босоножки 'MYER'"
-            />
-            <div className="card-body">
-              <p className="card-text">Босоножки 'MYER'</p>
-              <p className="card-text">34 000 руб.</p>
-              <a href="/products/1.html" className="btn btn-outline-primary">
-                Заказать
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col-4">
-          <div className="card catalog-item-card">
-            <img
-              src="./img/products/sandals_keira.jpg"
-              className="card-img-top img-fluid"
-              alt="Босоножки 'Keira'"
-            />
-            <div className="card-body">
-              <p className="card-text">Босоножки 'Keira'</p>
-              <p className="card-text">7 600 руб.</p>
-              <a href="/products/1.html" className="btn btn-outline-primary">
-                Заказать
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col-4">
-          <div className="card catalog-item-card">
-            <img
-              src="./img/products/superhero_sneakers.jpg"
-              className="card-img-top img-fluid"
-              alt="Супергеройские кеды"
-            />
-            <div className="card-body">
-              <p className="card-text">Супергеройские кеды</p>
-              <p className="card-text">1 400 руб.</p>
-              <a href="/products/1.html" className="btn btn-outline-primary">
-                Заказать
-              </a>
-            </div>
-          </div>
-        </div>
+        {catalogArr.map((i) => {
+          return (
+            <Card title={i.title} price={i.price} key={i.id} img={i.images} />
+          );
+        })}
       </div>
       <div className="text-center">
-        <button className="btn btn-outline-primary">Загрузить ещё</button>
+        <button
+          className="btn btn-outline-primary"
+          onClick={handleDownloadMore}
+        >
+          Загрузить ещё
+        </button>
       </div>
     </section>
   );
