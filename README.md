@@ -16,4 +16,4 @@
 - npm install
 - npm run start
 
-## [Ссылка на GitHub Pages]()
+## [Ссылка на GitHub Pages](https://luba-web.github.io/ra16-diploma/)
