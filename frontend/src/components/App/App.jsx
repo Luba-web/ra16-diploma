@@ -20,7 +20,7 @@ function App() {
           <div className="col">
             <Bunner src={banner} />
             <Routes>
-              <Route path="/" exact element={<HomePage />} />
+              <Route path="/ra16-diploma" exact element={<HomePage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/about" element={<AboutShopPage />} />
               <Route path="/catalog" element={<CatalogPage />} />
