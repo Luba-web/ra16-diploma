@@ -49,7 +49,11 @@ export function Header() {
             <Logo src={logo} />
             <div className="collapase navbar-collapse" id="navbarMain">
               <ul className="navbar-nav mr-auto">
-                <li className={`nav-item${pathname === '/' ? ' active' : ''}`}>
+                <li
+                  className={`nav-item${
+                    pathname === '/ra16-diploma' ? ' active' : ''
+                  }`}
+                >
                   <NavLink to="/ra16-diploma" className="nav-link">
                     Главная
                   </NavLink>
