@@ -1,7 +1,14 @@
 //каталог
 
 import { Catalog } from '../../components/Catalog/Catalog';
+import { SearchForm } from '../../components/SearchForm/SearchForm';
 
-export const CatalogPage = () => {
-  return <Catalog isActiveForm={true} />;
-};
+export function CatalogPage() {
+  return (
+    <section className="catalog">
+      <h2 className="text-center">Каталог</h2>
+      <SearchForm />
+      <Catalog />
+    </section>
+  );
+}

@@ -7,6 +7,7 @@ import { CartPage } from '../../pages/CartPage/CartPage';
 import { CatalogPage } from '../../pages/CatalogPage/CatalogPage';
 import { ContactsPage } from '../../pages/ContactsPage/ContactsPage';
 import { NotFoundPage } from '../../pages/NotFoundPage/NotFoundPage';
+import { ProductPage } from '../../pages/ProductPage/ProductPage';
 import { Bunner } from '../Banner/Banner';
 import banner from '../../img/banner.jpg';
 
@@ -20,11 +21,11 @@ function App() {
             <Bunner src={banner} />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/cart.html" element={<CartPage />} />
-              <Route path="/about.html" element={<AboutShopPage />} />
-              <Route path="/catalog.html" element={<CatalogPage />} />
-              {/* <Route path="/catalog.html/:id" element={<CardProduct />}/> */}
-              <Route path="/contacts.html" element={<ContactsPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/about" element={<AboutShopPage />} />
+              <Route path="/catalog" element={<CatalogPage />} />
+              <Route path="/products/:id" element={<ProductPage />} />
+              <Route path="/contacts" element={<ContactsPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>

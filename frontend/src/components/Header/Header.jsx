@@ -1,20 +1,44 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setStateQuery } from '../../thunks/productsThunk';
 import Logo from '../Logo/Logo';
-import logoImg from '../../img/header-logo.png';
-import { useState } from 'react';
+import logo from '../../img/header-logo.png';
 
 export function Header() {
+  const { pathname } = useLocation();
+  const [active, setActive] = useState(false);
+  const [query, setQuery] = useState('');
+  const searchInput = useRef(null);
+
   const navigate = useNavigate();
 
-  const [activeSearch, setActiveSearch] = useState(false);
-  const [value, setValue] = useState('');
+  const dispatch = useDispatch();
+  const totalItems = useSelector((state) => state.cart.totalItems);
 
-  const onCart = () => {
-    navigate('/cart.html');
+  useEffect(() => {
+    active && searchInput.current.focus();
+  });
+
+  const handleSearchTogglerClick = () => {
+    setActive((active) => !active);
+    query.length > 0 && navigate('/catalog');
+    dispatch(setStateQuery(query));
+    setQuery('');
   };
 
-  const onSearch = () => {
-    setActiveSearch(!activeSearch);
+  const handleCartClick = () => {
+    navigate('/cart');
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchTogglerClick();
+    }
+  };
+
+  const handleSubmitSearch = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -22,42 +46,38 @@ export function Header() {
       <div className="row">
         <div className="col">
           <nav className="navbar navbar-expand-sm navbar-light bg-light">
-            <Logo src={logoImg} />
-            <div className="collapse navbar-collapse" id="navbarMain">
+            <Logo src={logo} />
+            <div className="collapase navbar-collapse" id="navbarMain">
               <ul className="navbar-nav mr-auto">
-                <li
-                  className={({ isActive }) =>
-                    isActive ? 'nav-item active' : 'nav-item'
-                  }
-                >
-                  <NavLink className="nav-link" to="/">
+                <li className={`nav-item${pathname === '/' ? ' active' : ''}`}>
+                  <NavLink to="/" className="nav-link">
                     Главная
                   </NavLink>
                 </li>
                 <li
-                  className={({ isActive }) =>
-                    isActive ? 'nav-item active' : 'nav-item'
-                  }
+                  className={`nav-item${
+                    pathname === '/catalog' ? ' active' : ''
+                  }`}
                 >
-                  <NavLink className="nav-link" to="/catalog.html">
+                  <NavLink className="nav-link" to="/catalog">
                     Каталог
                   </NavLink>
                 </li>
                 <li
-                  className={({ isActive }) =>
-                    isActive ? 'nav-item active' : 'nav-item'
-                  }
+                  className={`nav-item${
+                    pathname === '/about' ? ' active' : ''
+                  }`}
                 >
-                  <NavLink className="nav-link" to="/about.html">
+                  <NavLink className="nav-link" to="/about">
                     О магазине
                   </NavLink>
                 </li>
                 <li
-                  className={({ isActive }) =>
-                    isActive ? 'nav-item active' : 'nav-item'
-                  }
+                  className={`nav-item${
+                    pathname === '/contacts' ? ' active' : ''
+                  }`}
                 >
-                  <NavLink className="nav-link" to="/contacts.html">
+                  <NavLink className="nav-link" to="/contacts">
                     Контакты
                   </NavLink>
                 </li>
@@ -65,36 +85,40 @@ export function Header() {
               <div>
                 <div className="header-controls-pics">
                   <div
+                    onClick={handleSearchTogglerClick}
                     data-id="search-expander"
                     className="header-controls-pic header-controls-search"
-                    onClick={onSearch}
                   ></div>
-                  {/* <!-- Do programmatic navigation on click to /cart.html --> */}
                   <div
                     className="header-controls-pic header-controls-cart"
-                    onClick={onCart}
+                    onClick={handleCartClick}
                   >
-                    <div className="header-controls-cart-full">1</div>
+                    {totalItems && totalItems > 0 ? (
+                      <div className="header-controls-cart-full">
+                        {totalItems}
+                      </div>
+                    ) : (
+                      ''
+                    )}
                     <div className="header-controls-cart-menu"></div>
                   </div>
                 </div>
-                {activeSearch && (
-                  <form
-                    data-id="search-form"
-                    className={
-                      activeSearch
-                        ? 'header-controls-search-form form-inline'
-                        : 'header-controls-search-form form-inline invisible'
-                    }
-                  >
-                    <input
-                      className="form-control"
-                      placeholder="Поиск"
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
-                    />
-                  </form>
-                )}
+                <form
+                  data-id="search-form"
+                  className={`header-controls-search-form form-inline${
+                    active ? '' : ' invisible'
+                  }`}
+                  onSubmit={handleSubmitSearch}
+                >
+                  <input
+                    className="form-control"
+                    placeholder="Поиск"
+                    value={query}
+                    ref={searchInput}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                  />
+                </form>
               </div>
             </div>
           </nav>

@@ -1,43 +1,176 @@
-//корзина
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { countItems } from '../../thunks/cartThunk';
+import { Loader } from '../../components/Loader/Loader';
+import { getStorageItems } from '../../storage/localStorage';
+import { getOrderApi } from '../../utils/const';
 
-export const Cart = () => {
+export function Cart() {
+  const dispatch = useDispatch();
+  const miniLocalStorage = getStorageItems();
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [storage, setStorage] = useState(miniLocalStorage);
+  const [contacts, setContacts] = useState({ phone: '', address: '' });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    setTotalPrice(
+      new Intl.NumberFormat('ru-RU').format(
+        storage.reduce((prev, next) => prev + +next.price * +next.quantity, 0)
+      )
+    );
+    dispatch(
+      countItems(storage.reduce((prev, next) => prev + +next.quantity, 0))
+    );
+  }, [dispatch, storage]);
+
+  const handleDelete = (nanoId) => {
+    const newStorage = storage.filter((item) => item.nano !== nanoId);
+    localStorage.setItem('items', JSON.stringify(newStorage));
+    setStorage(newStorage);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setContacts((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleOrder = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const orderObject = {
+      owner: contacts,
+      items: storage.map((item) => ({
+        id: +item.id,
+        price: item.price,
+        count: item.quantity,
+      })),
+    };
+    getOrderApi(orderObject)
+      .then((request) => {
+        if (request.ok) {
+          setMessage('Ваш заказ успешно отправлен!');
+          setLoading(false);
+          localStorage.removeItem('items');
+          setStorage([]);
+        } else {
+          return;
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
-    <section className="cart">
-      <h2 className="text-center">Корзина</h2>
-      <table className="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Название</th>
-            <th scope="col">Размер</th>
-            <th scope="col">Кол-во</th>
-            <th scope="col">Стоимость</th>
-            <th scope="col">Итого</th>
-            <th scope="col">Действия</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td scope="row">1</td>
-            <td>
-              <a href="/products/1.html">Босоножки 'MYER'</a>
-            </td>
-            <td>18 US</td>
-            <td>1</td>
-            <td>34 000 руб.</td>
-            <td>34 000 руб.</td>
-            <td>
-              <button className="btn btn-outline-danger btn-sm">Удалить</button>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="5" className="text-right">
-              Общая стоимость
-            </td>
-            <td>34 000 руб.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <>
+      {storage && storage.length > 0 ? '' : <h1>Корзина пуста</h1>}
+      {message && <div className="alert alert-success">{message}</div>}
+      {loading ? <Loader /> : ''}
+      {storage && storage.length > 0 && (
+        <section className="cart">
+          <h2 className="text-center">Корзина</h2>
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Название</th>
+                <th scope="col">Размер</th>
+                <th scope="col">Кол-во</th>
+                <th scope="col">Стоимость</th>
+                <th scope="col">Итого</th>
+                <th scope="col">Действия</th>
+              </tr>
+            </thead>
+            <tbody>
+              {storage.map((item) => (
+                <tr key={item.nano}>
+                  <td>{item.id}</td>
+                  <td>
+                    <Link to={`/products/${item.id}`}>{item.title}</Link>
+                  </td>
+                  <td>{item.activeSize}</td>
+                  <td>{item.quantity}</td>
+                  <td>{new Intl.NumberFormat('ru-RU').format(item.price)}</td>
+                  <td>
+                    {new Intl.NumberFormat('ru-RU').format(
+                      item.price * item.quantity
+                    )}{' '}
+                    руб.
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => handleDelete(item.nano)}
+                    >
+                      Удалить
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td colSpan="5" className="text-right">
+                  Общая стоимость
+                </td>
+                <td>{totalPrice} руб.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      )}
+      {storage && storage.length > 0 && (
+        <section className="order">
+          <h2 className="text-center">Оформить заказ</h2>
+          <div
+            className="card"
+            style={{ maxWidth: 30 + 'rem', margin: 0 + 'auto' }}
+          >
+            <form className="card-body" onSubmit={handleOrder}>
+              <div className="form-group">
+                <label htmlFor="phone">Телефон</label>
+                <input
+                  className="form-control"
+                  name="phone"
+                  id="phone"
+                  placeholder="Ваш телефон"
+                  value={contacts.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="address">Адрес доставки</label>
+                <input
+                  className="form-control"
+                  name="address"
+                  id="address"
+                  placeholder="Адрес доставки"
+                  value={contacts.address}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="agreement"
+                  required
+                />
+                <label className="form-check-label" htmlFor="agreement">
+                  Согласен с правилами доставки
+                </label>
+              </div>
+              <button type="submit" className="btn btn-outline-secondary">
+                Оформить
+              </button>
+            </form>
+          </div>
+        </section>
+      )}
+    </>
   );
-};
+}

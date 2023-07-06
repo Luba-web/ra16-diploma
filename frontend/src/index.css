@@ -177,6 +177,15 @@ section {
   object-fit: contain;
 }
 
+.card-text-custom {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.mr-bt {
+  margin-bottom: 20px;
+}
 /* Catalog */
 .catalog {
   min-height: 600px;
