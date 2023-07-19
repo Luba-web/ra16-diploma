@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Categories from '../Categories/Categories';
 import { ProductsList } from '../ProductsList/ProductsList';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   appendProducts,
   fetchProducts,
@@ -34,17 +34,20 @@ export function Catalog() {
     dispatch(fetchCategories());
   }, [dispatch, query, activeCategory]);
 
-  const handleCategoryClick = (id) => {
-    dispatch(setActiveCategory(id));
-    dispatch(fetchProducts(id, query));
-    dispatch(setStateOffset(id, query, 12));
-  };
-
-  const handleMoreClick = () => {
+  const handleMoreClick = useCallback(() => {
     setOffset((prev) => prev + 6);
     dispatch(appendProducts(activeCategory, query, offset));
     dispatch(setStateOffset(activeCategory, query, offset + 6));
-  };
+  }, [dispatch, activeCategory, query, offset]);
+
+  const handleCategoryClick = useCallback(
+    (id) => {
+      dispatch(setActiveCategory(id));
+      dispatch(fetchProducts(id, query));
+      dispatch(setStateOffset(id, query, 12));
+    },
+    [dispatch, query]
+  );
 
   return (
     <>
