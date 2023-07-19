@@ -1,14 +1,30 @@
 import { Loader } from '../Loader/Loader';
 import { Link } from 'react-router-dom';
 import { Error } from '../Error/Error';
+import { Category } from '../Category/Category';
+import { useCallback } from 'react';
 
-export default function CategoriesFilter({
+export function Categories({
   error,
   loading,
   active,
   handleCategoryClick,
   categories,
 }) {
+  const drawCategory = useCallback(
+    (categories) => {
+      return categories.map(({ id, title }) => (
+        <Category
+          key={id}
+          id={id}
+          active={active}
+          title={title}
+          handleCategoryClick={handleCategoryClick}
+        />
+      ));
+    },
+    [categories, handleCategoryClick, active]
+  );
   return (
     <>
       {error ? <Error message={error} /> : null}
@@ -26,21 +42,7 @@ export default function CategoriesFilter({
               Все
             </Link>
           </li>
-          {categories &&
-            categories.map((categor) => (
-              <li className="nav-item" key={categor.id}>
-                {/* eslint-disable-next-line*/}
-                <Link
-                  type="button"
-                  className={
-                    active === categor.id ? 'nav-link active' : 'nav-link'
-                  }
-                  onClick={() => handleCategoryClick(categor.id)}
-                >
-                  {categor.title}
-                </Link>
-              </li>
-            ))}
+          {categories && drawCategory(categories, handleCategoryClick)}
         </ul>
       )}
     </>

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import Categories from '../Categories/Categories';
+import { Categories } from '../Categories/Categories';
 import { ProductsList } from '../ProductsList/ProductsList';
 import { useCallback, useEffect, useState } from 'react';
 import {
