@@ -4,17 +4,20 @@ import { ProductInfo } from '../ProductInfo/ProductInfo';
 export function Cart({ storage, handleDelete, totalPrice }) {
   const drawProductInfo = useCallback(
     (storage, handleDelete) => {
-      storage.map(({ nano, id, title, activeSize, quantity, price }) => (
-        <ProductInfo
-          nano={nano}
-          id={id}
-          title={title}
-          activeSize={activeSize}
-          quantity={quantity}
-          price={price}
-          handleDelete={handleDelete}
-        />
-      ));
+      return storage.map(({ nano, id, title, activeSize, quantity, price }) => {
+        return (
+          <ProductInfo
+            key={id}
+            nano={nano}
+            id={id}
+            title={title}
+            activeSize={activeSize}
+            quantity={quantity}
+            price={price}
+            handleDelete={handleDelete}
+          />
+        );
+      });
     },
     [storage, handleDelete]
   );
