@@ -1,8 +1,7 @@
 //о магазине
-
 export const AboutShopPage = () => {
   return (
-    <section className="top-sales">
+    <section className="about-page">
       <h2 className="text-center">О магазине</h2>
       <p>
         В Интернете можно встретить немало магазинов, предлагающих аксессуары.

@@ -11,11 +11,9 @@ import { baseUrl } from '../utils/const';
 
 export const appendProducts = (category, query, offset) => (dispatch) => {
   dispatch(productsLoading());
-
   const path = `/api/items?${offset ? 'offset=' + offset : ''}${
     query ? '&q=' + query : ''
   }${category ? '&categoryId=' + category : ''}`;
-  console.log(path, baseUrl);
   fetch(baseUrl + path)
     .then((request) => {
       if (request.status === 200) {

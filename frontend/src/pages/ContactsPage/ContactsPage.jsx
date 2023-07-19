@@ -1,8 +1,7 @@
 //контакты
-
 export const ContactsPage = () => {
   return (
-    <section className="top-sales">
+    <section className="contacts">
       <h2 className="text-center">Контакты</h2>
       <p>
         Наш головной офис расположен в г.Москва, по адресу: Варшавское шоссе, д.

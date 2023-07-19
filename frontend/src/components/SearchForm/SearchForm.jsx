@@ -17,22 +17,38 @@ export function SearchForm() {
     setWord(query);
   }, [query]);
 
-  const handleSearch = (e) => {
-    setWord(e);
-    if (e.trim().length > 3) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch(setStateQuery(word));
+    if (word.length > 0) {
+      console.log(e);
       dispatch(setStateQuery(word));
       dispatch(fetchProducts(activeCategory, e));
       dispatch(setStateOffset(activeCategory, e, 12));
     }
   };
 
+  const handleChange = (e) => {
+    if (e.target.value.length === 0) {
+      dispatch(setStateQuery(''));
+    }
+    setWord(e.target.value);
+  };
+
+  const handleBlur = (e) => {
+    handleSubmit(e);
+  };
+
   return (
-    <form className="catalog-search-form form-inline">
+    <form className="catalog-search-form form-inline" onSubmit={handleSubmit}>
       <input
         className="form-control"
         value={word}
         placeholder="Поиск"
-        onChange={(e) => handleSearch(e.target.value)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={() => setWord('')}
       />
     </form>
   );

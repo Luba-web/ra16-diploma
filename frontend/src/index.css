@@ -20,11 +20,6 @@ a:hover {
   cursor: pointer;
 }
 
-section {
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
 /* Common Styles */
 .invisible {
   opacity: 0;
@@ -188,7 +183,7 @@ section {
 }
 /* Catalog */
 .catalog {
-  min-height: 600px;
+  min-height: 900px;
 }
 
 .catalog-categories {
@@ -324,4 +319,22 @@ h2,
 .btn-outline-primary:hover {
   background-color: #727e86;
   border-color: #727e86;
+}
+
+.btn-outline-primary-mr {
+  margin-bottom: 1em;
+}
+
+.img-banner {
+  min-height: 205px;
+}
+
+.card_order {
+  margin: 0 auto 1em;
+}
+
+.header-fixed {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }

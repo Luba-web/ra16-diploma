@@ -4,26 +4,48 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setStateQuery } from '../../thunks/productsThunk';
 import Logo from '../Logo/Logo';
 import logo from '../../img/header-logo.png';
+import { arrNav } from '../../utils/const';
+import { setActiveCategory } from '../../thunks/categoriesThunk';
+import { orderMess } from '../../store/orderSlice';
 
 export function Header() {
   const { pathname } = useLocation();
-  const [active, setActive] = useState(false);
-  const [query, setQuery] = useState('');
-  const searchInput = useRef(null);
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-  const totalItems = useSelector((state) => state.cart.totalItems);
 
+  const searchInput = useRef(null);
+
+  const [active, setActive] = useState(false);
+  const [query, setQuery] = useState('');
+
+  const totalItems = useSelector((state) => state.cart.totalItems);
+  const activeCategory = useSelector((state) => state.categories.active);
+
+  // навидение фокуса в инпут поиска в шапке
   useEffect(() => {
     active && searchInput.current.focus();
-  });
+  }, [active]);
 
-  const handleSearchTogglerClick = () => {
+  // сброс состояний каталога и корзины
+  useEffect(() => {
+    if (pathname === '/ra16-diploma') {
+      dispatch(setStateQuery(''));
+      dispatch(setActiveCategory(0));
+      setQuery('');
+      setActive(false);
+    }
+    if (pathname !== '/cart') {
+      dispatch(orderMess(''));
+    }
+  }, [pathname, dispatch]);
+
+  // переход по поиску в шапке в каталог
+  const handleSearchTogglerClick = (e) => {
     setActive((active) => !active);
     query.length > 0 && navigate('/catalog');
     dispatch(setStateQuery(query));
+    dispatch(setActiveCategory(activeCategory));
     setQuery('');
   };
 
@@ -42,49 +64,27 @@ export function Header() {
   };
 
   return (
-    <header className="container">
+    <header className="container header-fixed">
       <div className="row">
         <div className="col">
           <nav className="navbar navbar-expand-sm navbar-light bg-light">
             <Logo src={logo} />
             <div className="collapase navbar-collapse" id="navbarMain">
               <ul className="navbar-nav mr-auto">
-                <li
-                  className={`nav-item${
-                    pathname === '/ra16-diploma' ? ' active' : ''
-                  }`}
-                >
-                  <NavLink to="/ra16-diploma" className="nav-link">
-                    Главная
-                  </NavLink>
-                </li>
-                <li
-                  className={`nav-item${
-                    pathname === '/catalog' ? ' active' : ''
-                  }`}
-                >
-                  <NavLink className="nav-link" to="/catalog">
-                    Каталог
-                  </NavLink>
-                </li>
-                <li
-                  className={`nav-item${
-                    pathname === '/about' ? ' active' : ''
-                  }`}
-                >
-                  <NavLink className="nav-link" to="/about">
-                    О магазине
-                  </NavLink>
-                </li>
-                <li
-                  className={`nav-item${
-                    pathname === '/contacts' ? ' active' : ''
-                  }`}
-                >
-                  <NavLink className="nav-link" to="/contacts">
-                    Контакты
-                  </NavLink>
-                </li>
+                {arrNav.map((i, index) => {
+                  return (
+                    <li
+                      className={`nav-item${
+                        pathname === i.path ? ' active' : ''
+                      }`}
+                      key={index}
+                    >
+                      <NavLink to={i.path} className="nav-link">
+                        {i.title}
+                      </NavLink>
+                    </li>
+                  );
+                })}
               </ul>
               <div>
                 <div className="header-controls-pics">

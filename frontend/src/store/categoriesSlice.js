@@ -6,7 +6,7 @@ export const categoriesSlice = createSlice({
     data: [],
     error: '',
     loading: false,
-    active: '',
+    active: 0,
   },
   reducers: {
     categoriesLoading: (state, action) => {

@@ -3,6 +3,7 @@ import { fetchTopSales } from '../../thunks/productsThunk';
 import { useEffect } from 'react';
 import { Loader } from '../Loader/Loader';
 import { ProductItem } from '../ProductItem/ProductItem';
+import { Error } from '../Error/Error';
 
 export function TopSales() {
   const dispatch = useDispatch();
@@ -17,9 +18,7 @@ export function TopSales() {
   return topSales ? (
     <section className="top-sales">
       <h2 className="text-center">Хиты продаж!</h2>
-      {error && (
-        <div className="alert alert-danger">Призошла ошибка {error}</div>
-      )}
+      {error ? <Error message={error} /> : null}
       {loading ? (
         <Loader />
       ) : (
