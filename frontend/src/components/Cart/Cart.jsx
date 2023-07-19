@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom';
+import { useCallback } from 'react';
+import { ProductInfo } from '../ProductInfo/ProductInfo';
 
 export function Cart({ storage, handleDelete, totalPrice }) {
+  const drawProductInfo = useCallback(
+    (storage, handleDelete) => {
+      storage.map(({ nano, id, title, activeSize, quantity, price }) => (
+        <ProductInfo
+          nano={nano}
+          id={id}
+          title={title}
+          activeSize={activeSize}
+          quantity={quantity}
+          price={price}
+          handleDelete={handleDelete}
+        />
+      ));
+    },
+    [storage, handleDelete]
+  );
   return (
     <section className="cart">
       <h2 className="text-center">Корзина</h2>
@@ -17,31 +34,7 @@ export function Cart({ storage, handleDelete, totalPrice }) {
           </tr>
         </thead>
         <tbody>
-          {storage.map((item) => (
-            <tr key={item.nano}>
-              <td>{item.id}</td>
-              <td>
-                <Link to={`/products/${item.id}`}>{item.title}</Link>
-              </td>
-              <td>{item.activeSize}</td>
-              <td>{item.quantity}</td>
-              <td>{new Intl.NumberFormat('ru-RU').format(item.price)}</td>
-              <td>
-                {new Intl.NumberFormat('ru-RU').format(
-                  item.price * item.quantity
-                )}{' '}
-                руб.
-              </td>
-              <td>
-                <button
-                  className="btn btn-outline-danger btn-sm"
-                  onClick={() => handleDelete(item.nano)}
-                >
-                  Удалить
-                </button>
-              </td>
-            </tr>
-          ))}
+          {drawProductInfo(storage, handleDelete)}
           <tr>
             <td colSpan="5" className="text-right">
               Общая стоимость
