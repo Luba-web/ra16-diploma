@@ -1,6 +1,7 @@
 import { Loader } from '../Loader/Loader';
 import { ProductItem } from '../ProductItem/ProductItem';
 import { Error } from '../Error/Error';
+import { useCallback } from 'react';
 
 export function ProductsList({
   products,
@@ -9,6 +10,14 @@ export function ProductsList({
   next,
   handleMoreClick,
 }) {
+  const drawProductItem = useCallback(
+    (products) => {
+      return products.map((product) => (
+        <ProductItem key={product.id} product={product} />
+      ));
+    },
+    [products]
+  );
   return products && products.length > 0 ? (
     <>
       <>
@@ -16,11 +25,7 @@ export function ProductsList({
         {loading ? (
           <Loader />
         ) : (
-          <div className="row">
-            {products.map((product) => (
-              <ProductItem key={product.id} product={product} />
-            ))}
-          </div>
+          <div className="row">{drawProductItem(products)}</div>
         )}
       </>
       {next.length > 0 && (
