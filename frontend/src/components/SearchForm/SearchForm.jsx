@@ -4,7 +4,7 @@ import {
   setStateQuery,
 } from '../../thunks/productsThunk';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export function SearchForm() {
   const dispatch = useDispatch();
@@ -17,17 +17,19 @@ export function SearchForm() {
     setWord(query);
   }, [query]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    dispatch(setStateQuery(word));
-    if (word.length > 0) {
-      console.log(e);
       dispatch(setStateQuery(word));
-      dispatch(fetchProducts(activeCategory, e));
-      dispatch(setStateOffset(activeCategory, e, 12));
-    }
-  };
+      if (word.length > 0) {
+        dispatch(setStateQuery(word));
+        dispatch(fetchProducts(activeCategory, e));
+        dispatch(setStateOffset(activeCategory, e, 12));
+      }
+    },
+    [word, activeCategory]
+  );
 
   const handleChange = (e) => {
     if (e.target.value.length === 0) {
