@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTopSales } from '../../thunks/productsThunk';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Loader } from '../Loader/Loader';
 import { ProductItem } from '../ProductItem/ProductItem';
 import { Error } from '../Error/Error';
@@ -15,6 +15,15 @@ export function TopSales() {
     dispatch(fetchTopSales());
   }, [dispatch]);
 
+  const drawProductItem = useCallback(
+    (topSales) => {
+      return topSales.map((product) => (
+        <ProductItem key={product.id} product={product} />
+      ));
+    },
+    [topSales]
+  );
+
   return topSales ? (
     <section className="top-sales">
       <h2 className="text-center">Хиты продаж!</h2>
@@ -22,11 +31,7 @@ export function TopSales() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="row">
-          {topSales.map((product) => (
-            <ProductItem key={product.id} product={product} />
-          ))}
-        </div>
+        <div className="row">{drawProductItem(topSales)}</div>
       )}
     </section>
   ) : null;
