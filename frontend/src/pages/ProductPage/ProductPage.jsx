@@ -15,7 +15,18 @@ export function ProductPage() {
       {product && (
         <section className="catalog-item">
           <h2 className="text-center">{product.title}</h2>
-          <Product product={product} />
+          <Product
+            sizes={product.sizes}
+            title={product.title}
+            price={product.price}
+            images={product.images}
+            sku={product.sku}
+            manufacturer={product.manufacturer}
+            color={product.color}
+            material={product.material}
+            season={product.season}
+            reason={product.reason}
+          />
         </section>
       )}
     </>
